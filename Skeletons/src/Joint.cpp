@@ -1,6 +1,7 @@
 #include "Joint.h"
 #include "Cube.h"
 #include "cmath"
+#include <iostream>
 
 Joint::Joint()
 {
@@ -16,7 +17,7 @@ Joint::Joint()
 	JointDOF.push_back(DOFy);
 	JointDOF.push_back(DOFz);
 	cube = new Cube();
-
+	strcpy_s(JointName, "");
 }
 
 Joint::~Joint()
@@ -26,11 +27,16 @@ Joint::~Joint()
 bool Joint::Load(Tokenizer* tknizer)
 {
 	float DOFmin, DOFmax;
+	char name[256];
+	tknizer->GetToken(name);
+	strcpy_s(JointName, name);
 	tknizer->FindToken("{");
+
 	while (1)
 	{
 		char temp[256];
 		tknizer->GetToken(temp);
+
 		if (strcmp(temp, "offset") == 0)
 		{
 			offset.x = tknizer->GetFloat();
@@ -69,9 +75,12 @@ bool Joint::Load(Tokenizer* tknizer)
 		}
 		else if (strcmp(temp, "pose") == 0)
 		{
-			JointDOF[0]->SetValue(tknizer->GetFloat());
-			JointDOF[1]->SetValue(tknizer->GetFloat());
-			JointDOF[2]->SetValue(tknizer->GetFloat());
+			pose.x = tknizer->GetFloat();
+			pose.y = tknizer->GetFloat();
+			pose.z = tknizer->GetFloat();
+			JointDOF[0]->SetValue(pose.x);
+			JointDOF[1]->SetValue(pose.y);
+			JointDOF[2]->SetValue(pose.z);
 		}
 		else if (strcmp(temp, "balljoint") == 0)
 		{
@@ -88,6 +97,17 @@ bool Joint::Load(Tokenizer* tknizer)
 		{
 			tknizer->SkipLine(); // Unrecognized token
 		}
+	}
+	return false;
+}
+
+void Joint::ResetAll()
+{
+	JointDOF[0]->SetValue(pose.x);
+	JointDOF[1]->SetValue(pose.y);
+	JointDOF[2]->SetValue(pose.z);
+	for (auto child : children) {
+		child->ResetAll();
 	}
 }
 

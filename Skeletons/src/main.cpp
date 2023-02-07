@@ -3,6 +3,9 @@
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
+#include "../imgui/imgui_internal.h"
+
+static bool isSkin = false;
 
 void error_callback(int error, const char* description) {
     // Print error.
@@ -19,8 +22,8 @@ void setup_callbacks(GLFWwindow* window) {
     glfwSetKeyCallback(window, Window::keyCallback);
 
     // Set the mouse and cursor callbacks
-    glfwSetMouseButtonCallback(window, Window::mouse_callback);
-    glfwSetCursorPosCallback(window, Window::cursor_callback);
+    //glfwSetMouseButtonCallback(window, Window::mouse_callback);
+    //glfwSetCursorPosCallback(window, Window::cursor_callback);
 }
 
 void setup_opengl_settings() {
@@ -46,6 +49,43 @@ void print_versions() {
 #endif
 }
 
+void setImGuiStyle()
+{
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.Colors[ImGuiCol_WindowBg] = ImColor(12, 0, 49, 0.6*255);
+    style.Colors[ImGuiCol_CheckMark] = ImColor(255, 114, 136, 0.8 * 255);
+    style.Colors[ImGuiCol_Button] = ImColor(255, 103, 87, 0.6 * 255);
+    style.Colors[ImGuiCol_ButtonActive] = ImColor(249, 255, 36, 0.8 * 255);
+    style.Colors[ImGuiCol_ButtonHovered] = ImColor(87, 182, 255, 0.6 * 255);
+    style.WindowMinSize = ImVec2(500, 1000);
+    style.WindowTitleAlign = ImVec2(0.5, 0.5);
+    style.Colors[ImGuiCol_TitleBg] = ImColor(117, 169, 255, 0.8 * 255);
+    style.Colors[ImGuiCol_TitleBgActive] = ImColor(133, 101, 255, 0.6 * 255);
+    //style.Colors[ImGuiCol_TitleBgCollapsed] = ImColor(180, 200, 255, 0.5 * 255);
+
+}
+
+void makeSliderBox(Joint* root) {
+    ImGui::Text(root->JointName);
+    
+    float minX = root->JointDOF[0]->DOFmin;
+    float maxX = root->JointDOF[0]->DOFmax;
+    ImGui::SliderFloat(("DOF_X (" + std::string(root->JointName) + ")").c_str(), &(root->JointDOF[0]->DOFvalue), minX, maxX);
+            
+    float minY = root->JointDOF[1]->DOFmin;
+    float maxY = root->JointDOF[1]->DOFmax;
+    ImGui::SliderFloat(("DOF_Y (" + std::string(root->JointName) + ")").c_str(), &(root->JointDOF[1]->DOFvalue), minY, maxY);
+           
+    float minZ = root->JointDOF[2]->DOFmin;
+    float maxZ = root->JointDOF[2]->DOFmax;
+    ImGui::SliderFloat(("DOF_Z (" + std::string(root->JointName) + ")").c_str(), &(root->JointDOF[2]->DOFvalue), minZ, maxZ);
+
+    for (int i = 0; i < root->children.size(); i++) {
+        makeSliderBox(root->children[i]);
+    }
+    
+}
+
 int main(void) {
     // Create the GLFW window.
     GLFWwindow* window = Window::createWindow(1600, 1200);
@@ -63,53 +103,91 @@ int main(void) {
     // Initialize objects/pointers for rendering; exit if initialization fails.
     if (!Window::initializeObjects()) exit(EXIT_FAILURE);
 
-    //-------------------------------------ImGui Start-----------------------------------------------------------------
     // Setup Dear ImGui context
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
     // Load Fonts
     io.Fonts->AddFontFromFileTTF("assets/HORIZONBT.TTF", 40.0f);
-    //-------------------------------------ImGui End-----------------------------------------------------------------
 
-    if (io.WantCaptureMouse)
-    {
-        printf("on");
-    }
 
     // Loop while GLFW window should stay open.
     while (!glfwWindowShouldClose(window)) {
         // Gets events, including input such as keyboard and mouse or window resizing.
         glfwPollEvents();
+        // Clear the color and depth buffers.
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        setImGuiStyle();
 
+        // Main render display callback. Rendering of our objects.
+        Window::displayCallback(window);
         
 
-        // Main render display callback. Rendering of objects is done here.
-        Window::displayCallback(window);
+        // Design ImGui
+        {
+            ImGui::Begin("Property Panel \n(Press P to change its visibility.)");
+
+            // Button
+            // ImGui::Text("Choose the model to be loaded.");
+            //if (ImGui::Button("Tiny Man", ImVec2(120, 50))) {
+            //    Window::setModel(window, "test");
+            //}
+            //else if (ImGui::Button("Wasp", ImVec2(120, 50))) {
+            //    Window::setModel(window, "wasp");
+            //}
+            //else if (ImGui::Button("Dragon", ImVec2(120, 50))) {
+            //    Window::setModel(window, "dragon");
+            //}
+
+            // Drop-down menu for choosing model
+            static int selectedItem = NULL;
+            std::vector<const char*> items = { "Tiny Man", "Wasp", "Dragon" };
+            ImGui::PushItemWidth(ImGui::GetWindowWidth() / 3);
+            ImGui::Combo("Loading Skeleton", &selectedItem, items.data(), items.size());
+            ImGui::PopItemWidth();
+            if (items[selectedItem] == "Tiny Man") {
+                Window::setModel(window, "test");
+            }
+            else if (items[selectedItem] == "Wasp") {
+                Window::setModel(window, "wasp");
+            }
+            else if (items[selectedItem] == "Dragon") {
+                Window::setModel(window, "dragon");
+            }
+
+            // Checkbox
+            /*ImGui::Checkbox("Skinning", &isSkin);
+            if (isSkin) {
+                ImGui::Text("Finish skinning!");
+            }*/
+
+            // Slider box
+            ImGui::Text("Camera Settings");
+            ImGui::SliderFloat("Distance", &(Window::Cam->Distance), 0.01f, 100.0f);
+            ImGui::SliderFloat("Azimuth", &(Window::Cam->Azimuth), 0.0f, 360.0f);
+            ImGui::SliderFloat("Incline", &(Window::Cam->Incline), -90.0f, 90.0f);
+            ImGui::Text("\nDOF Settings");
+            makeSliderBox(Window::currSkel->root);
+
+            ImGui::End();
+        }
 
         // Idle callback. Updating objects, etc. can be done here.
         Window::idleCallback();
 
-        ImGui::Begin("Hello, world!");
-        ImGui::Text("This is some useful text.");
-        ImGui::End();
-
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        // Swap buffers.
         glfwSwapBuffers(window);
     }
 

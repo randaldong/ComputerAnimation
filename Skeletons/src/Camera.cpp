@@ -3,7 +3,6 @@
 ////////////////////////////////////////
 
 #include "Camera.h"
-#include <iostream>
 
 Camera::Camera(int m) {
     mode = m;
@@ -35,6 +34,7 @@ void Camera::Reset() {
             Distance = 2.2f;
             Azimuth = 154.0f;
             Incline = 19.0f;
+
             break;
         case 2:
             Distance = 3.7f;

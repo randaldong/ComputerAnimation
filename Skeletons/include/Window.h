@@ -18,6 +18,9 @@ public:
     static Skeleton* dragon;
     static Skeleton* currSkel;
 
+    // Camera
+    static Camera* Cam;
+
     // Shader Program
     static GLuint shaderProgram;
 
@@ -29,6 +32,9 @@ public:
     // for the Window
     static GLFWwindow* createWindow(int width, int height);
     static void resizeCallback(GLFWwindow* window, int width, int height);
+    
+    // for loading model
+    static void setModel(GLFWwindow* window, const char* modelName);
 
     // update and draw functions
     static void idleCallback();
@@ -39,6 +45,6 @@ public:
 
     // callbacks - for interaction
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-    static void mouse_callback(GLFWwindow* window, int button, int action, int mods);
-    static void cursor_callback(GLFWwindow* window, double currX, double currY);
+    //static void mouse_callback(GLFWwindow* window, int button, int action, int mods);
+    //static void cursor_callback(GLFWwindow* window, double currX, double currY);
 };

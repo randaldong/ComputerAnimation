@@ -6,7 +6,7 @@
 // Window Properties
 int Window::width;
 int Window::height;
-const char* Window::windowTitle = "Randal's Gentle Observer under Gravity, Sunlight, Magnetism";
+const char* Window::windowTitle = "Randal's Renderer";
 
 // Objects to render
 Skeleton* Window::test;
@@ -15,7 +15,7 @@ Skeleton* Window::dragon;
 Skeleton* Window::currSkel;
 
 // Camera Properties
-Camera* Cam;
+Camera* Window::Cam;
 
 // Interaction Variables
 bool LeftDown, MiddleDown, RightDown;
@@ -107,11 +107,11 @@ GLFWwindow* Window::createWindow(int width, int height) {
     else if (currSkel == wasp) m = 2;
     else if (currSkel == dragon) m = 3;
     Cam = new Camera(m);
-    Cam->SetAspect(float(width) / float(height));
+    Cam->Aspect = float(width) / float(height);
 
     // initialize the interaction variables
-    LeftDown = RightDown = false;
-    MouseX = MouseY = 0;
+    //LeftDown = RightDown = false;
+    //MouseX = MouseY = 0;
 
     // Call the resize callback to make sure things get drawn immediately.
     Window::resizeCallback(window, width, height);
@@ -125,7 +125,7 @@ void Window::resizeCallback(GLFWwindow* window, int width, int height) {
     // Set the viewport size.
     glViewport(0, 0, width, height);
 
-    Cam->SetAspect(float(width) / float(height));
+    Cam->Aspect = float(width) / float(height);
 }
 
 // update and draw functions
@@ -139,9 +139,6 @@ void Window::idleCallback() {
 }
 
 void Window::displayCallback(GLFWwindow* window) {
-    // Clear the color and depth buffers.
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     // Render the object.
     currSkel->Draw(Cam->GetViewProjectMtx(), Window::shaderProgram);
 
@@ -156,7 +153,25 @@ void Window::displayCallback(GLFWwindow* window) {
 // helper to reset the camera
 void Window::resetCamera() {
     Cam->Reset();
-    Cam->SetAspect(float(Window::width) / float(Window::height));
+    Cam->Aspect = float(Window::width) / float(Window::height);
+}
+
+void Window::setModel(GLFWwindow* window, const char* modelName) {
+    if (modelName == "test") {
+        currSkel = test;
+        Cam->mode = 1;
+        //resetCamera();
+    }
+    else if (modelName == "wasp") {
+        currSkel = wasp;
+        Cam->mode = 2;
+        //resetCamera();
+    }
+    else if (modelName == "dragon") {
+        currSkel = dragon;
+        Cam->mode = 3;
+        //resetCamera();
+    }
 }
 
 // callbacks - for Interaction
@@ -167,6 +182,7 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
 
     // Check for a key press.
     if (action == GLFW_PRESS) {
+        const float rate = 10.0f;
         switch (key) {
             case GLFW_KEY_ESCAPE:
                 // Close the window. This causes the program to also terminate.
@@ -174,61 +190,39 @@ void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, 
                 break;
             case GLFW_KEY_R:
                 resetCamera();
-                break;
-            case GLFW_KEY_1:
-                currSkel = test;
-                Cam->mode = 1;
-                resetCamera();
-
-                break;
-            case GLFW_KEY_2:
-                currSkel = wasp;
-                Cam->mode = 2;
-                resetCamera();
-
-                break;
-            case GLFW_KEY_3:
-                currSkel = dragon;
-                Cam->mode = 3;
-                resetCamera();
-
-                break;
-            default:
+                currSkel->root->ResetAll();
                 break;
         }
     }
 }
 
-void Window::mouse_callback(GLFWwindow* window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
-        LeftDown = (action == GLFW_PRESS);
-    }
-    else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
-        MiddleDown = (action == GLFW_PRESS);
-    }
-    else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
-        RightDown = (action == GLFW_PRESS);
-    }
-}
+//void Window::mouse_callback(GLFWwindow* window, int button, int action, int mods) {
+//    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+//        LeftDown = (action == GLFW_PRESS);
+//    }
+//    else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+//        RightDown = (action == GLFW_PRESS);
+//    }
+//}
 
-void Window::cursor_callback(GLFWwindow* window, double currX, double currY) {
-    int maxDelta = 100;
-    int dx = glm::clamp((int)currX - MouseX, -maxDelta, maxDelta);
-    int dy = glm::clamp(-((int)currY - MouseY), -maxDelta, maxDelta);
-
-    MouseX = (int)currX;
-    MouseY = (int)currY;
-
-    // Move camera
-    // NOTE: this should really be part of Camera::Update()
-    if (LeftDown) {
-        const float rate = 1.0f;
-        Cam->SetAzimuth(Cam->GetAzimuth() + dx * rate);
-        Cam->SetIncline(glm::clamp(Cam->GetIncline() - dy * rate, -90.0f, 90.0f));
-    }
-    if (RightDown) {
-        const float rate = 0.005f;
-        float dist = glm::clamp(Cam->GetDistance() * (1.0f - dx * rate), 0.01f, 1000.0f);
-        Cam->SetDistance(dist);
-    }
-}
+//void Window::cursor_callback(GLFWwindow* window, double currX, double currY) {
+//    int maxDelta = 100;
+//    int dx = glm::clamp((int)currX - MouseX, -maxDelta, maxDelta);
+//    int dy = glm::clamp(-((int)currY - MouseY), -maxDelta, maxDelta);
+//
+//    MouseX = (int)currX;
+//    MouseY = (int)currY;
+//
+//    // Move camera
+//    // NOTE: this should really be part of Camera::Update()
+//    if (LeftDown) {
+//        const float rate = 1.0f;
+//        Cam->SetAzimuth(Cam->GetAzimuth() + dx * rate);
+//        Cam->SetIncline(glm::clamp(Cam->GetIncline() - dy * rate, -90.0f, 90.0f));
+//    }
+//    if (RightDown) {
+//        const float rate = 0.005f;
+//        float dist = glm::clamp(Cam->GetDistance() * (1.0f - dx * rate), 0.01f, 1000.0f);
+//        Cam->SetDistance(dist);
+//    }
+//}
