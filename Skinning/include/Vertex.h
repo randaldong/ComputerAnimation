@@ -9,7 +9,7 @@ public:
 	glm::vec3 position;
 	glm::vec3 normal;
 	std::vector<float> weights;
-	std::vector<Joint*> joints; // A vertex can be attached to multiple vertices
+	std::vector<Joint*> joints; // define joints that influence the current vertex; a vertex can be attached to multiple joints 
 
 	Vertex();
 	~Vertex();
