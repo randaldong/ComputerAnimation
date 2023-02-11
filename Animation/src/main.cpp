@@ -5,12 +5,14 @@
 #include "../imgui/imgui_impl_opengl3.h"
 #include "../imgui/imgui_internal.h"
 
+static bool isSelectAnim = false;
 static bool isSelectSkel = false;
 static bool isSelectAttachedSkin = false;
 static bool isSelectOriginalSkin = false;
 static bool isDrawSkel = false;
 static bool isDrawAttachedSkin = false;
 static bool isDrawOriginalSkin = false;
+static bool isPlayAnim = false;
 
 void error_callback(int error, const char* description) {
     // Print error.
@@ -136,7 +138,7 @@ int main(void) {
 
 
         // Main render display callback. Rendering of our objects.
-        Window::displayCallback(window, isDrawOriginalSkin, isDrawSkel, isDrawAttachedSkin);
+        Window::displayCallback(window, isDrawOriginalSkin, isDrawSkel, isDrawAttachedSkin, isPlayAnim);
 
 
         // Design ImGui
@@ -156,66 +158,86 @@ int main(void) {
             //}
 
             // Checkbox + Drop-down menu for choosing model (skel & skin)
-            ImGui::Checkbox("Skeleton", &isSelectSkel);
-            if (isSelectSkel) {
-                isDrawSkel = true;
+            ImGui::Checkbox("Animation", &isSelectAnim);
+            if (isSelectAnim) {
+                isDrawSkel = false;
                 isDrawAttachedSkin = false;
                 isDrawOriginalSkin = false;
-                static int selectedSkel = NULL;
-                std::vector<const char*> skels = { "Tiny Man", "Static Wasp", "Animated Wasp", "Dragon" };
-                ImGui::PushItemWidth(ImGui::GetWindowWidth() / 3);
-                ImGui::Combo("Loading Skeleton", &selectedSkel, skels.data(), skels.size());
+                isPlayAnim = true;
+                // load different anim
+                static int selectedAnim = NULL;
+                std::vector<const char*> anims = { "Walking Wasp", "More..."};
+                ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.5);
+                ImGui::Combo("Loading Animation", &selectedAnim, anims.data(), anims.size());
                 ImGui::PopItemWidth();
-                if (skels[selectedSkel] == "Tiny Man") {
-                    Window::setSkel(window, "test");
-                    ImGui::Text("<No Skin File Available>");
+                if (anims[selectedAnim] == "Walking Wasp") {
+                    Window::setAnimRig(window, "wasp");
                 }
-                else if (skels[selectedSkel] == "Static Wasp") {
-                    Window::setSkel(window, "wasp1");
-                    // Attach Skin
-                    ImGui::Checkbox("Attach Skin", &isSelectAttachedSkin);
-                    if (isSelectAttachedSkin) {
-                        isDrawSkel = false;
-                        isDrawAttachedSkin = true;
-                        isDrawOriginalSkin = false;
-                        Window::setSkin(window, "wasp1");
-                    }
+                else if (anims[selectedAnim] == "More...") {
+                    ImGui::Text("<More characters are coming!!!>");
                 }
-                else if (skels[selectedSkel] == "Animated Wasp") {
-                    Window::setSkel(window, "wasp2");
-                    // Attach Skin
-                    ImGui::Checkbox("Attach Skin", &isSelectAttachedSkin);
-                    if (isSelectAttachedSkin) {
-                        isDrawSkel = false;
-                        isDrawAttachedSkin = true;
-                        isDrawOriginalSkin = false;
-                        Window::setSkin(window, "wasp2");
-                    }
-                }
-                else if (skels[selectedSkel] == "Dragon") {
-                    Window::setSkel(window, "dragon");
-                    ImGui::Text("<No Skin File Available>");
-                }
+
+                // settings for play control
+                ImGui::Text("<Progress Bar>");
+                ImGui::SliderFloat("Speed", &(Window::currPlayer->playSpeed), 0.0f, 5.0f);
+
+                ImGui::SliderFloat("Time", &(Window::currPlayer->curTime), 0.0f, 100.0f);
+
+
             }
-            else {
-                ImGui::Checkbox("Original Skin In Binding Space", &isSelectOriginalSkin);
-                if (isSelectOriginalSkin) {
-                    isDrawSkel = false;
+            else
+            {
+                isPlayAnim = false;
+
+                ImGui::Checkbox("Skeleton", &isSelectSkel);
+                if (isSelectSkel) {
+                    isDrawSkel = true;
                     isDrawAttachedSkin = false;
-                    isDrawOriginalSkin = true;
-                    static int selectedSkin = NULL;
-                    std::vector<const char*> skins = { "Static Wasp", "Animated Wasp", "DoNotClick" };
-                    ImGui::PushItemWidth(ImGui::GetWindowWidth() / 3);
-                    ImGui::Combo("Loading Undeformed Skin", &selectedSkin, skins.data(), skins.size());
+                    isDrawOriginalSkin = false;
+
+                    static int selectedSkel = NULL;
+                    std::vector<const char*> skels = { "Tiny Man", "Static Wasp", "Dragon" };
+                    ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.5);
+                    ImGui::Combo("Loading Skeleton", &selectedSkel, skels.data(), skels.size());
                     ImGui::PopItemWidth();
-                    if (skins[selectedSkin] == "Static Wasp") {
-                        Window::setSkin(window, "wasp1");
+                    if (skels[selectedSkel] == "Tiny Man") {
+                        Window::setSkel(window, "test");
+                        ImGui::Text("<No Skin File Available>");
                     }
-                    if (skins[selectedSkin] == "Animated Wasp") {
-                        Window::setSkin(window, "wasp2");
+                    else if (skels[selectedSkel] == "Static Wasp") {
+                        Window::setSkel(window, "wasp1");
+                        // Attach Skin
+                        ImGui::Checkbox("Attach Skin", &isSelectAttachedSkin);
+                        if (isSelectAttachedSkin) {
+                            isDrawSkel = false;
+                            isDrawAttachedSkin = true;
+                            isDrawOriginalSkin = false;
+                            Window::setSkin(window, "wasp1");
+                        }
                     }
-                    else if (skins[selectedSkin] == "DoNotClick") {
-                        ImGui::Text("<Plz DO NOT CLICK!!!>");
+                    else if (skels[selectedSkel] == "Dragon") {
+                        Window::setSkel(window, "dragon");
+                        ImGui::Text("<No Skin File Available>");
+                    }
+                }
+                else {
+                    ImGui::Checkbox("Original Skin In Binding Space", &isSelectOriginalSkin);
+                    if (isSelectOriginalSkin) {
+                        isDrawSkel = false;
+                        isDrawAttachedSkin = false;
+                        isDrawOriginalSkin = true;
+
+                        static int selectedSkin = NULL;
+                        std::vector<const char*> skins = { "Static Wasp", "More..." };
+                        ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.5);
+                        ImGui::Combo("Loading Undeformed Skin", &selectedSkin, skins.data(), skins.size());
+                        ImGui::PopItemWidth();
+                        if (skins[selectedSkin] == "Static Wasp") {
+                            Window::setSkin(window, "wasp1");
+                        }
+                        else if (skins[selectedSkin] == "More...") {
+                            ImGui::Text("<More characters are coming!!!>");
+                        }
                     }
                 }
             }

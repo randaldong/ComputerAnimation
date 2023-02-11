@@ -5,6 +5,8 @@
 #include "Shader.h"
 #include "core.h"
 #include "Skin.h"
+#include "AnimationPlayer.h"
+#include "AnimRig.h"
 
 class Window {
 public:
@@ -16,12 +18,16 @@ public:
     // Objects to render
     static Skeleton* testSkel;
     static Skeleton* wasp1Skel;
-    static Skeleton* wasp2Skel;
     static Skeleton* dragonSkel;
     static Skeleton* currSkel;
+
     static Skin* wasp1Skin;
-    static Skin* wasp2Skin;
     static Skin* currSkin;
+
+    static AnimRig* waspRig;
+    static AnimationClip* waspClip;
+    static AnimationPlayer* waspPlayer;
+    static AnimationPlayer* currPlayer;
 
     // Camera
     static Camera* Cam;
@@ -44,9 +50,12 @@ public:
     // for attaching skin
     static void setSkin(GLFWwindow* window, const char* skinName);
 
+    // for playing animation
+    static void setAnimRig(GLFWwindow* window, const char* animRigName);
+
     // update and draw functions
     static void idleCallback();
-    static void displayCallback(GLFWwindow* window, bool isDrawOriginalSkin, bool isDrawSkel, bool isDrawAttachedSkin);
+    static void displayCallback(GLFWwindow* window, bool isDrawOriginalSkin, bool isDrawSkel, bool isDrawAttachedSkin, bool isPlayAnim);
 
     // helper to reset the camera
     static void resetCamera();

@@ -11,12 +11,16 @@ const char* Window::windowTitle = "Randal's Renderer";
 // Objects to render
 Skeleton* Window::testSkel;
 Skeleton* Window::wasp1Skel;
-Skeleton* Window::wasp2Skel;
 Skeleton* Window::dragonSkel;
 Skeleton* Window::currSkel;
+
 Skin* Window::wasp1Skin;
-Skin* Window::wasp2Skin;
 Skin* Window::currSkin;
+
+AnimRig* Window::waspRig;
+AnimationClip* Window::waspClip;
+AnimationPlayer* Window::waspPlayer;
+AnimationPlayer* Window::currPlayer;
 
 // Camera Properties
 Camera* Window::Cam;
@@ -41,24 +45,27 @@ bool Window::initializeProgram() {
 }
 
 bool Window::initializeObjects() {
-    // Create a skeleton
+    // Create skeleton
     testSkel = new Skeleton();
     wasp1Skel = new Skeleton();
-    wasp2Skel = new Skeleton();
     dragonSkel = new Skeleton();
     testSkel->Load();
     wasp1Skel->Load("assets/wasp1.skel");
-    wasp2Skel->Load("assets/wasp2.skel");
     dragonSkel->Load("assets/dragon.skel");
     currSkel = testSkel;
     currSkel->Update(glm::mat4(1.0f)); // Update to get the world matrix of every joint
-    // Create a skin
+    // Create skin
     wasp1Skin = new Skin(wasp1Skel);
     wasp1Skin->Load("assets/wasp1.skin");
-    wasp2Skin = new Skin(wasp2Skel);
-    wasp2Skin->Load("assets/wasp2.skin");
     currSkin = wasp1Skin;
     currSkin->Update();
+    // Create animation
+    waspRig = new AnimRig();
+    waspRig->Load("assets/wasp2.skel", "assets/wasp2.skin");
+    waspClip = new AnimationClip();
+    waspClip->Load("assets/wasp2_walk.anim");
+    waspPlayer = new AnimationPlayer(waspClip, waspRig);
+    currPlayer = waspPlayer;
 
     return true;
 }
@@ -107,7 +114,7 @@ GLFWwindow* Window::createWindow(int width, int height) {
     // test: m = 1; wasp: m = 2; dragon: m = 3
     int m;
     if (!currSkel || currSkel == testSkel) m = 1;
-    else if (currSkel == wasp1Skel || currSkel == wasp2Skel) m = 2;
+    else if (currSkel == wasp1Skel) m = 2;
     else if (currSkel == dragonSkel) m = 3;
     Cam = new Camera();
     Cam->Aspect = float(width) / float(height);
@@ -137,13 +144,15 @@ void Window::idleCallback() {
     Cam->Update();
     testSkel->Update(glm::mat4(1.0f));
     wasp1Skel->Update(glm::mat4(1.0f));
-    wasp2Skel->Update(glm::mat4(1.0f));
     dragonSkel->Update(glm::mat4(1.0f));
     wasp1Skin->Update();
-    wasp2Skin->Update();
+
+    // should first update animation player to get root translation
+    waspPlayer->Update();
+    waspRig->Update(waspPlayer->rootTranslation);
 }
 
-void Window::displayCallback(GLFWwindow* window, bool isDrawOriginalSkin, bool isDrawSkel, bool isDrawAttachedSkin) {
+void Window::displayCallback(GLFWwindow* window, bool isDrawOriginalSkin, bool isDrawSkel, bool isDrawAttachedSkin, bool isPlayAnim) {
     // Render the object.
     if (isDrawSkel) {
         currSkel->Draw(Cam->GetViewProjectMtx(), Window::shaderProgram->programID);
@@ -153,6 +162,9 @@ void Window::displayCallback(GLFWwindow* window, bool isDrawOriginalSkin, bool i
     }
     else if (isDrawOriginalSkin) {
         currSkin->Draw(isDrawOriginalSkin, Cam->GetViewProjectMtx(), Window::shaderProgram->programID);
+    }
+    else if (isPlayAnim) {
+        currPlayer->rig->Draw(Cam->GetViewProjectMtx(), Window::shaderProgram->programID);
     }
     // Gets events, including input such as keyboard and mouse or window resizing.
     // Move to main due to ImGui
@@ -178,10 +190,6 @@ void Window::setSkel(GLFWwindow* window, const char* skelName) {
         currSkel = wasp1Skel;
         Cam->mode = 2;
     }
-    else if (skelName == "wasp2") {
-        currSkel = wasp2Skel;
-        Cam->mode = 2;
-    }
     else if (skelName == "dragon") {
         currSkel = dragonSkel;
         Cam->mode = 3;
@@ -193,8 +201,12 @@ void Window::setSkin(GLFWwindow* window, const char* skinName)
     if (skinName == "wasp1") {
         currSkin = wasp1Skin;
     }
-    if (skinName == "wasp2") {
-        currSkin = wasp2Skin;
+}
+
+void Window::setAnimRig(GLFWwindow* window, const char* animRigName)
+{
+    if (animRigName == "wasp") {
+        currPlayer = waspPlayer;
     }
 }
 
@@ -220,10 +232,11 @@ void Window::cleanUp() {
     // Deallcoate the objects.
     delete testSkel;
     delete wasp1Skel;
-    delete wasp2Skel;
     delete dragonSkel;
     delete wasp1Skin;
-    delete wasp2Skin;
+    delete waspRig;
+    delete waspClip;
+    delete waspPlayer;
     delete Cam;
 
     // Delete the shader program.

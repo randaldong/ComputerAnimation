@@ -141,8 +141,11 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="include\Animation.h" />
+    <ClInclude Include="include\AnimationClip.h" />
+    <ClInclude Include="include\AnimationPlayer.h" />
+    <ClInclude Include="include\AnimRig.h" />
     <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\Channel.h" />
     <ClInclude Include="include\core.h" />
     <ClInclude Include="include\Cube.h" />
     <ClInclude Include="include\DOF.h" />
@@ -432,6 +435,7 @@
     <ClInclude Include="include\glm\vector_relational.hpp" />
     <ClInclude Include="include\GL\glew.h" />
     <ClInclude Include="include\Joint.h" />
+    <ClInclude Include="include\Keyframe.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\Skeleton.h" />
     <ClInclude Include="include\Skin.h" />
@@ -449,11 +453,15 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="include\glm\detail\glm.cpp" />
-    <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\AnimationClip.cpp" />
+    <ClCompile Include="src\AnimationPlayer.cpp" />
+    <ClCompile Include="src\AnimRig.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Channel.cpp" />
     <ClCompile Include="src\Cube.cpp" />
     <ClCompile Include="src\DOF.cpp" />
     <ClCompile Include="src\Joint.cpp" />
+    <ClCompile Include="src\Keyframe.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Skeleton.cpp" />
