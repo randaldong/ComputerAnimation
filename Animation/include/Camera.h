@@ -13,7 +13,7 @@
 
 class Camera {
 public:
-    Camera(int m = 1);
+    Camera(int m);
 
     void Update();
     void Reset();

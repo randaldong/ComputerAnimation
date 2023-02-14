@@ -1,4 +1,4 @@
-#include "Window.h"
+﻿#include "Window.h"
 #include "core.h"
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
@@ -13,6 +13,8 @@ static bool isDrawSkel = false;
 static bool isDrawAttachedSkin = false;
 static bool isDrawOriginalSkin = false;
 static bool isPlayAnim = false;
+static bool isPausedJustNow = false;
+float prevDeltaT;
 
 void error_callback(int error, const char* description) {
     // Print error.
@@ -115,14 +117,14 @@ int main(void) {
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+    // Load Icons and Fonts
+    //io.Fonts->AddFontFromFileTTF("assets/HFSprouts-2.ttf", 35.0f);
+    io.Fonts->AddFontFromFileTTF("assets/Ancoa-Demo-Bold-2.otf", 45.0f);
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-    // Load Fonts
-    io.Fonts->AddFontFromFileTTF("assets/HORIZONBT.TTF", 40.0f);
-
-
+    
     // Loop while GLFW window should stay open.
     while (!glfwWindowShouldClose(window)) {
         // Gets events, including input such as keyboard and mouse or window resizing.
@@ -143,21 +145,10 @@ int main(void) {
 
         // Design ImGui
         {
-            ImGui::Begin("Property Panel \n(Press P to change its visibility.)");
-
-            // Button
-            // ImGui::Text("Choose the model to be loaded.");
-            //if (ImGui::Button("Tiny Man", ImVec2(120, 50))) {
-            //    Window::setModel(window, "test");
-            //}
-            //else if (ImGui::Button("Wasp", ImVec2(120, 50))) {
-            //    Window::setModel(window, "wasp");
-            //}
-            //else if (ImGui::Button("Dragon", ImVec2(120, 50))) {
-            //    Window::setModel(window, "dragon");
-            //}
+            ImGui::Begin("Property Panel");
 
             // Checkbox + Drop-down menu for choosing model (skel & skin)
+            ImGui::Text("Loading Settings");
             ImGui::Checkbox("Animation", &isSelectAnim);
             if (isSelectAnim) {
                 isDrawSkel = false;
@@ -165,25 +156,60 @@ int main(void) {
                 isDrawOriginalSkin = false;
                 isPlayAnim = true;
                 // load different anim
-                static int selectedAnim = NULL;
+                static int selectedAnim = 0;
                 std::vector<const char*> anims = { "Walking Wasp", "More..."};
                 ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.5);
                 ImGui::Combo("Loading Animation", &selectedAnim, anims.data(), anims.size());
                 ImGui::PopItemWidth();
                 if (anims[selectedAnim] == "Walking Wasp") {
-                    Window::setAnimRig(window, "wasp");
+                    Window::setAnim(window, "walkingwasp");
                 }
                 else if (anims[selectedAnim] == "More...") {
                     ImGui::Text("<More characters are coming!!!>");
                 }
 
                 // settings for play control
-                ImGui::Text("<Progress Bar>");
+                ImGui::Text("\nPlayback Settings");
+                // pause
+                bool isPausePushed = ImGui::Button("Pause", ImVec2(100, 60));
+                if (isPausePushed && !isPausedJustNow) { // pause button
+                    prevDeltaT = Window::currPlayer->deltaT;
+                    Window::currPlayer->deltaT = 0;
+                    isPausedJustNow = !isPausedJustNow;
+                }
+                else if (isPausePushed && isPausedJustNow) {
+                    Window::currPlayer->deltaT = prevDeltaT;
+                    isPausedJustNow = !isPausedJustNow;
+                }
+                // speed
                 ImGui::SliderFloat("Speed", &(Window::currPlayer->playSpeed), 0.0f, 5.0f);
-
+                // progress bar
                 ImGui::SliderFloat("Time", &(Window::currPlayer->curTime), 0.0f, 100.0f);
+                // play mode (after end of clip...): To infinity! loop, stop, walk backwards
+                ImGui::Text("Play Mode");
+                static int selectedPlayMode = NULL;
+                std::vector<const char*> playModes = { "To infinity!", "Loop from start", "Stop at end", "Walk back and forth" };
+                ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.55);
+                ImGui::Combo("after end...", &selectedPlayMode, playModes.data(), playModes.size());
+                ImGui::PopItemWidth();
+                if (playModes[selectedPlayMode] == "To infinity!") {
+                    Window::currPlayer->playMode = "To infinity!";
+                }
+                if (playModes[selectedPlayMode] == "Loop from start") {
+                    Window::currPlayer->playMode = "Loop from start";
+                }
+                if (playModes[selectedPlayMode] == "Stop at end") {
+                    Window::currPlayer->playMode = "Stop at end";
+                }
+                if (playModes[selectedPlayMode] == "Walk back and forth") {
+                    Window::currPlayer->playMode = "Walk back and forth";
+                }
 
-
+                // Slider box for camera
+                ImGui::Text("\nCamera Settings");
+                ImGui::SliderFloat("Distance", &(Window::Cam->Distance), 1.0f, 100.0f);
+                ImGui::SliderFloat("Azimuth", &(Window::Cam->Azimuth), 0.0f, 360.0f);
+                ImGui::SliderFloat("Incline", &(Window::Cam->Incline), -90.0f, 90.0f);
             }
             else
             {
@@ -219,6 +245,14 @@ int main(void) {
                         Window::setSkel(window, "dragon");
                         ImGui::Text("<No Skin File Available>");
                     }
+                    // Slider box for camera
+                    ImGui::Text("\nCamera Settings");
+                    ImGui::SliderFloat("Distance", &(Window::Cam->Distance), 1.0f, 100.0f);
+                    ImGui::SliderFloat("Azimuth", &(Window::Cam->Azimuth), 0.0f, 360.0f);
+                    ImGui::SliderFloat("Incline", &(Window::Cam->Incline), -90.0f, 90.0f);
+                    // Slider box for DOF
+                    ImGui::Text("\nDOF Settings");
+                    makeSliderBox(Window::currSkel->root);
                 }
                 else {
                     ImGui::Checkbox("Original Skin In Binding Space", &isSelectOriginalSkin);
@@ -239,16 +273,21 @@ int main(void) {
                             ImGui::Text("<More characters are coming!!!>");
                         }
                     }
+                    else {
+                        isDrawSkel = false;
+                        isDrawAttachedSkin = false;
+                        isDrawOriginalSkin = false;
+                    }
+                    // Slider box for camera
+                    ImGui::Text("\nCamera Settings");
+                    ImGui::SliderFloat("Distance", &(Window::Cam->Distance), 1.0f, 100.0f);
+                    ImGui::SliderFloat("Azimuth", &(Window::Cam->Azimuth), 0.0f, 360.0f);
+                    ImGui::SliderFloat("Incline", &(Window::Cam->Incline), -90.0f, 90.0f);
                 }
             }
 
-            // Slider box
-            ImGui::Text("Camera Settings");
-            ImGui::SliderFloat("Distance", &(Window::Cam->Distance), 1.0f, 100.0f);
-            ImGui::SliderFloat("Azimuth", &(Window::Cam->Azimuth), 0.0f, 360.0f);
-            ImGui::SliderFloat("Incline", &(Window::Cam->Incline), -90.0f, 90.0f);
-            ImGui::Text("\nDOF Settings");
-            makeSliderBox(Window::currSkel->root);
+            
+            
 
             ImGui::End();
         }

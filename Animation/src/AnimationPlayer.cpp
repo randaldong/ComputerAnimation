@@ -38,5 +38,32 @@ void AnimationPlayer::Update()
 	}
 
 	// increments current time
-	curTime += deltaT * playSpeed;
+	// set play mode (what to do after end of clip)
+	if (strcmp(playMode, "To infinity!") == 0) 
+		// always increment time
+		curTime += deltaT * playSpeed;
+	else if (strcmp(playMode, "Loop from start") == 0) {
+		// increment time when not reach the end
+		// back to start after reaching the end
+		if (curTime <= tEnd)
+			curTime += deltaT * playSpeed;
+		else
+			curTime = tStart;
+	}
+	else if (strcmp(playMode, "Stop at end") == 0) {
+		// only increment time when not reach the end
+		// do nothing after reaching the end
+		if (curTime <= tEnd)
+			curTime += deltaT * playSpeed;
+	}
+	else if (strcmp(playMode, "Walk back and forth") == 0) {
+		bool isWalkBack = false;
+		curTime += deltaT * playSpeed;
+		if (curTime > tEnd) {
+			deltaT *= -1;
+		}
+		else if (curTime < tStart) {
+			deltaT *= -1;
+		}
+	}
 }

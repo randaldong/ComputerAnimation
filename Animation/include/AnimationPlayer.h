@@ -13,8 +13,11 @@ public:
 	float playSpeed = 1.0f; // playback speed
 	std::vector<float> poses;
 	glm::mat4 rootTranslation;
+	const char* playMode = "To infinity!";
 
 	AnimationPlayer(AnimationClip* Clip, AnimRig* Rig);
 	~AnimationPlayer();
-	void Update(); // evaluates current poses, set these poses, increments current time
+	// evaluates current poses, set these poses, increments current time
+	// default play mode is walking till the end of the world
+	void Update(); 
 };

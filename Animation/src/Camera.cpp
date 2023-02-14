@@ -31,20 +31,25 @@ void Camera::Reset() {
     // Adjust distance, azimuth, incline according to different models.
     // Each model has its own camera mode.
     switch (mode) {
-    case 1:
+    case 1: // test skel
         Distance = 2.2f;
         Azimuth = 154.0f;
         Incline = 19.0f;
         break;
-    case 2:
+    case 2: // wasp1 skel
         Distance = 3.7f;
         Azimuth = 202.0f;
         Incline = 26.0f;
         break;
-    case 3:
+    case 3: // dragon skel
         Distance = 43.0f;
         Azimuth = 300.0f;
         Incline = 24.0f;
+        break;
+    case 4: // walking wasp anim
+        Distance = 8.0f;
+        Azimuth = 220.0f;
+        Incline = 25.0f;
         break;
     }
 }

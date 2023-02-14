@@ -1446,10 +1446,9 @@
     <Library Include="lib\glew32s.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="assets\CURLZMT.TTF" />
     <Font Include="assets\HORIZONBT.TTF" />
-    <Font Include="assets\JOKERMAN.TTF" />
-    <Font Include="assets\ITCBLKAD.TTF" />
+    <Font Include="assets\Ancoa-Demo-Bold-2.otf" />
+    <Font Include="assets\HFSprouts-2.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\icon.png">

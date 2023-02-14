@@ -51,7 +51,7 @@ public:
     static void setSkin(GLFWwindow* window, const char* skinName);
 
     // for playing animation
-    static void setAnimRig(GLFWwindow* window, const char* animRigName);
+    static void setAnim(GLFWwindow* window, const char* animRigName);
 
     // update and draw functions
     static void idleCallback();

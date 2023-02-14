@@ -25,6 +25,9 @@ AnimationPlayer* Window::currPlayer;
 // Camera Properties
 Camera* Window::Cam;
 
+// whether the model is just opened, control the camera mode
+const char* prevModel;
+
 // Interaction Variables
 bool LeftDown, RightDown;
 
@@ -111,12 +114,12 @@ GLFWwindow* Window::createWindow(int width, int height) {
     glfwSwapInterval(0);
 
     // set up the camera
-    // test: m = 1; wasp: m = 2; dragon: m = 3
+    // test: m = 1; wasp: m = 2; dragon: m = 3; walking wasp: m = 4
     int m;
     if (!currSkel || currSkel == testSkel) m = 1;
     else if (currSkel == wasp1Skel) m = 2;
     else if (currSkel == dragonSkel) m = 3;
-    Cam = new Camera();
+    Cam = new Camera(m);
     Cam->Aspect = float(width) / float(height);
 
     // initialize the interaction variables
@@ -185,14 +188,26 @@ void Window::setSkel(GLFWwindow* window, const char* skelName) {
     if (skelName == "test") {
         currSkel = testSkel;
         Cam->mode = 1;
+        if (prevModel != "test") {
+            Cam->Reset();
+            prevModel = "test";
+        }
     }
     else if (skelName == "wasp1") {
         currSkel = wasp1Skel;
         Cam->mode = 2;
+        if (prevModel != "wasp1") {
+            Cam->Reset();
+            prevModel = "wasp1";
+        }
     }
     else if (skelName == "dragon") {
         currSkel = dragonSkel;
         Cam->mode = 3;
+        if (prevModel != "dragon") {
+            Cam->Reset();
+            prevModel = "dragon";
+        }
     }
 }
 
@@ -203,10 +218,16 @@ void Window::setSkin(GLFWwindow* window, const char* skinName)
     }
 }
 
-void Window::setAnimRig(GLFWwindow* window, const char* animRigName)
+void Window::setAnim(GLFWwindow* window, const char* animRigName)
 {
-    if (animRigName == "wasp") {
+    if (animRigName == "walkingwasp") {
         currPlayer = waspPlayer;
+        Cam->mode = 4;
+        if (prevModel != "walkingwasp") {
+            Cam->Reset();
+            currPlayer->curTime = 0;
+            prevModel = "walkingwasp";
+        }
     }
 }
 
