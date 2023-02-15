@@ -9,7 +9,7 @@ public:
 	// Need a skeleton to map the pose vector to a specific rig
 	AnimRig* rig;
 	float curTime, tStart, tEnd;
-	float deltaT = 0.01f; // 60fps, slow-motion video
+	float deltaT = 0.01f; // 0.01f for 60fps, slow-motion video; set as 0.05 if not plugged-in
 	float playSpeed = 1.0f; // playback speed
 	std::vector<float> poses;
 	glm::mat4 rootTranslation;

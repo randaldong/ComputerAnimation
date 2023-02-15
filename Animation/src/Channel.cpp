@@ -109,7 +109,7 @@ void Channel::Precompute()
 
 float Channel::Evaluate(float time)
 {
-	float evalValue;
+	float evalValue = 0;
 	float duration = keyframes[numKeys - 1]->time - keyframes[0]->time; // time duration
 	float deltaVal = keyframes[numKeys - 1]->value - keyframes[0]->value; // delta value in a duration
 	// 1. find the proper span; 2. evaluate cubic equation for the span

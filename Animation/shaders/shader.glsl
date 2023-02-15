@@ -17,7 +17,7 @@ out vec3 fragNormal;
 void main()
 {
     gl_Position = ModelViewProjectionMtx * vec4(position, 1.0);
-	fragPosition=vec3(ModelMtx * vec4(position, 1));
+	fragPosition = vec3(ModelMtx * vec4(position, 1));
 	fragNormal = vec3(ModelMtx * vec4(normal, 0));
 }
 

@@ -236,7 +236,6 @@ void Window::setAnim(GLFWwindow* window, const char* animRigName)
 void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     // Check for a key press.
     if (action == GLFW_PRESS) {
-        const float rate = 10.0f;
         switch (key) {
             case GLFW_KEY_ESCAPE:
                 // Close the window. This causes the program to also terminate.
