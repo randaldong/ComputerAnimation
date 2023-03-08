@@ -1,4 +1,5 @@
 # Computer Animation
+This is the project of my study of Computer Animation at UCSD, thanks to Prof. Steve Rodenberg and TA Peter Wu for their instruction and help!
 
 # 1. Skeleton
 
