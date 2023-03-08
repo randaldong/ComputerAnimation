@@ -183,7 +183,7 @@ int main(void) {
                 // speed
                 ImGui::SliderFloat("Speed", &(Window::currPlayer->playSpeed), 0.0f, 5.0f);
                 // progress bar
-                ImGui::SliderFloat("Time", &(Window::currPlayer->curTime), 0.0f, 100.0f);
+                ImGui::SliderFloat("Progress Bar", &(Window::currPlayer->curTime), 0.0f, 100.0f);
                 // play mode (after end of clip...): To infinity! loop, stop, walk backwards
                 ImGui::Text("Play Mode");
                 static int selectedPlayMode = NULL;

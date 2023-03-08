@@ -53,7 +53,6 @@ Sphere fan(fanRadius, vec3(fanPos.x, fanPos.y, fanPos.z));
 float fanMoveSpeed = 0.05f;
 bool isFanUseColor = false;
 bool isFanTransparent = true;
-
 // wind
 double airDensity = 1.255;
 double airDragCoeff = 1.28; 
@@ -61,30 +60,11 @@ float vWindVal = -0.0001;
 vec3 windDir = cloth.clothPos - fanPos;
 vec3 vWind = vWindVal * windDir;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /** User Mouse Grab **/
-
 double grabForceVal = 15;
 vec3 grabStartPos;
 vec3 grabDir;
 vec3 grabForce;
-
-
-
-
 
 /** Window & World **/
 // Simulation
@@ -212,8 +192,6 @@ int main(int argc, const char* argv[])
         ImGui::NewFrame();
         setImGuiStyle();
 
-        
-
         {
             ImGui::Begin("Control Panel");
             // FPS
@@ -324,6 +302,10 @@ int main(int argc, const char* argv[])
             ImGui::SliderFloat("structural Kd", &(cloth.structuralDamping), 10.0f, 100.0f);
             ImGui::SliderFloat("shearing Kd", &(cloth.shearDamping), 0.0f, 5.0f);
             ImGui::SliderFloat("bending Kd", &(cloth.bendingDamping), 0.0f, 50.0f);
+            // friction
+            ImGui::Text("\nFriction");
+            ImGui::SliderFloat("cloth @ orb", &(orb.restitution), 0.0f, 1.0f);
+            ImGui::SliderFloat("cloth @ ground", &(ground.restitution), 0.0f, 1.0f);
 
             /** Light **/
             ImGui::Text("\nLight");
@@ -371,11 +353,6 @@ int main(int argc, const char* argv[])
             windDir = cloth.clothPos - fanPos;
             vWind = vWindVal * windDir;
 
-            /** Friction **/
-            ImGui::Text("\nFriction");
-            ImGui::SliderFloat("cloth & orb", &(orb.restitution), 0.0f, 1.0f);
-            ImGui::SliderFloat("cloth & ground", &(ground.restitution), 0.0f, 1.0f);
-
             /** User Grab **/
             ImGui::Text("\nMouse Grab");
             ImGui::Checkbox("Activate Grab Mode", &isGrabAllowed);
@@ -386,6 +363,7 @@ int main(int argc, const char* argv[])
                 isMovingCamera = false;
                 ImGui::Text("Grabing the cloth...");
             }
+
             /** Camera **/
             ImGui::Text("\nCamera");
             // move camera
@@ -401,12 +379,7 @@ int main(int argc, const char* argv[])
             ImGui::End();
         }
         
-
-
-
-
         ImGui::Render();
-
 
         /** Set background clolor **/
         glClearColor(bgColor.x, bgColor.y, bgColor.z, 1.0); // Set color value (R,G,B,A) - Set Status
@@ -430,7 +403,6 @@ int main(int argc, const char* argv[])
         fanRenderer.Update();
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 
         glfwSwapBuffers(window);
     }
@@ -471,7 +443,6 @@ GLFWwindow* createWindow(const char* windowTitle, const char* windowIconFile, in
 
     return window;
 }
-
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
