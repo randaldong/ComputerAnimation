@@ -71,7 +71,6 @@ void setImGuiStyle()
     style.Colors[ImGuiCol_TitleBg] = ImColor(117, 169, 255, 0.8 * 255);
     style.Colors[ImGuiCol_TitleBgActive] = ImColor(133, 101, 255, 0.6 * 255);
     //style.Colors[ImGuiCol_TitleBgCollapsed] = ImColor(180, 200, 255, 0.5 * 255);
-
 }
 
 void makeSliderBox(Joint* root) {

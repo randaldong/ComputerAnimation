@@ -74,6 +74,9 @@
     <IncludePath>D:\CG\Project\ComputerAnimation\Animation\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\CG\Project\ComputerAnimation\Animation\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>false</VcpkgEnabled>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
