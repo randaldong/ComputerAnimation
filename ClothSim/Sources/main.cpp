@@ -343,7 +343,7 @@ int main(int argc, const char* argv[])
                 }
             }
             if (clickWindHowling > 0) {
-                ImGui::SliderFloat("wind force", &(vWindVal), 0.0001f, 0.50f);
+                ImGui::SliderFloat("wind force", &(vWindVal), 0.0001f, 20.0f);
             }
             else {
                 vWindVal = -0.0001;

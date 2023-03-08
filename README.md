@@ -1,6 +1,3 @@
-# Computer Animation
-This is the project of my study of Computer Animation at UCSD, thanks to Prof. Steve Rodenberg and TA Peter Wu for their instruction and help!
-
 # 1. Skeleton
 
 ## 1.1 Load SKEL File
@@ -699,18 +696,17 @@ while (not finished) {
       6. translate +z (outward): `E`
       7. rotate clockwise: `C`
       8. rotate counterclockwise: `Z`
-3. Environment settings :1st_place_medal:
-   2. rigid: elasticity/friction between cloth & ground / cloth & sphere (how much energy was lost)
-   3. wind:
-      1. wind’s howling/calm
-      2. move wind spawn
-         1. Up: `W`
-         2. Down: `S`
-         3. Left: `A`
-         4. Right: `D`
-         5. Inward: `Q`
-         6. Outward: `E`
-      3. wind velocity (value)
+   5. Friction/elasticity with ground & sphere 
+3. Wind :1st_place_medal:
+   1. wind’s howling/calm
+   2. move wind spawn
+      1. Up: `W`
+      2. Down: `S`
+      3. Left: `A`
+      4. Right: `D`
+      5. Inward: `Q`
+      6. Outward: `E`
+   3. wind velocity (value)
 4. Light :1st_place_medal:
    1. move light: 
       1. Up: `W`
@@ -732,8 +728,3 @@ while (not finished) {
 6. User grab :1st_place_medal:
    1. press mouse left button to drag the cloth
    2. quite grab mode either by right click mouse button or unclick the checkbox 
-
-
-
-
-
