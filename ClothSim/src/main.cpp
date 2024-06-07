@@ -181,7 +181,7 @@ int main(int argc, const char* argv[])
     glEnable(GL_DEPTH_TEST);
     glPointSize(3);
 
-    /** -------------------------------- Redering loop -------------------------------- **/
+    /** -------------------------------- Rendering loop -------------------------------- **/
     while (!glfwWindowShouldClose(window))
     {
         /** Check for events **/

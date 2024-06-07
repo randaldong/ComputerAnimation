@@ -5,7 +5,7 @@ This documentation aims to provide necessary knowledge for a smooth handover of 
 1. [Skeleton.md](./Skeleton.md)
 2. [Skinning.md](./Skinning.md)
 3. [Animation.md](./Animation.md)
-4. [Cloth Simulation.md](./Cloth Simulation.md)
+4. [ClothSimulation.md](./ClothSimulation.md)
 
 ## 1. Project Knowledge
 
@@ -159,8 +159,10 @@ Milestones to be achieved in the coming months (refer to [JIRA](https://randaldo
   - For Mac: Xcode or Visual Studio Code
 - Dependencies:
   - GLM: https://github.com/g-truc/glm
+  - GLFW: https://www.glfw.org/
+  - GLAD: https://github.com/Dav1dde/glad
   - ImGui: https://github.com/ocornut/imgui
-
+  
 - Version control: [GitHub](https://github.com/randaldong/ComputerAnimation.git)
 - Bug tracking: [JIRA](https://randaldong.atlassian.net/jira/software/c/projects/AN/issues?jql=project%20%3D%20%22AN%22%20ORDER%20BY%20created%20DESC), Radar, GitHub Issues, Slack…
 
@@ -170,8 +172,6 @@ Milestones to be achieved in the coming months (refer to [JIRA](https://randaldo
 
 ### 2.2 Architecture Design
 
-
-
 1. Data Files
 
    - `.skel` file, refer to [1.1 Load File in Skeleton.md](./Skeleton.md#load-file)
@@ -179,29 +179,16 @@ Milestones to be achieved in the coming months (refer to [JIRA](https://randaldo
    - `.skin` file, refer to [2.1 Load File in Skinning.md](./Skinning.md#load-file)
 
    - `.anim` file, refer to [3.1 Load File in Animation.md](./Animation.md#load-file)
-
-2. Classes:
-
-   - `DOF`
-   - `Joint`
-   - `Cube`
-   - `Skeleton`
-
-3. 
+2. Classes & Hierarchy: see [Miro](https://miro.com/welcomeonboard/OExBODFHQVN5V0hSZlNKVk54ZHFEdHhqRGNabElJVVNzNTJyTTNsdkNBRjFLTnQwVXRxUmRhRmx5SG5idkxTb3wzNDU4NzY0NTQ0NTg1ODk1MDgwfDI=?share_link_id=393816811085)
 
 
 
 ### 2.4 Key Algorithms
 
+- Blinn-Phong Illumination Model: refer to [2.4 Blinn-Phong Illumination Model in Skinning.md](./Skinning.md##blinn-phong-illumination-model)
 - Forward Kinematics
 
-
-
-- Mass-Spring System
-
-
-
-- Blinn-Phong Illumination Model
+- Mass-Spring System: refer to [4.2 Mass-Spring System in ClothSimulation.md](./ClothSimulation.md##mass-spring-system)
 
 
 
@@ -215,13 +202,12 @@ Milestones to be achieved in the coming months (refer to [JIRA](https://randaldo
 
     - Git/GitHub Desktop
 
-  - For Mac
+  - For Mac:
 
     - Xcode
+    - Git/GitHub Desktop
 
-
-
-> Note: This application has not been tested on Linux, but the installation steps should be similar as long as all dependencies are included and referenced correctly.
+> Note: This application has not been tested on Mac and Linux, but the installation steps should be similar as long as all dependencies are included and referenced correctly.
 
 
 
@@ -233,7 +219,7 @@ Milestones to be achieved in the coming months (refer to [JIRA](https://randaldo
 
 ### 2.6 Development
 
-
+- Coding Standards
 
 
 
@@ -247,7 +233,6 @@ Milestones to be achieved in the coming months (refer to [JIRA](https://randaldo
   - OpenGL: https://registry.khronos.org/OpenGL-Refpages/gl4//
   - GLM: https://glm.g-truc.net/0.9.9/api/modules.html
   - ImGui: https://github.com/ocornut/imgui
-  - 
 - Tutorials:
   - [LearnOpenGL](https://learnopengl.com/)
   - YouTube playlist [Introduction to OpenGL](https://www.youtube.com/playlist?list=PLvv0ScY6vfd9zlZkIIqGDeG5TUWswkMox) by [Mike Shah](https://www.youtube.com/@MikeShah)

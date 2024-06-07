@@ -14,5 +14,6 @@ public:
 
 	bool Load(const char* skelfile, const char* skinfile);
 	void Update(glm::mat4 parentW);
-	void Draw(const glm::mat4& viewProjMtx, GLuint shader); // default: draw attached skin without skel
+	// default: draw attached skin without skel
+	void Draw(const glm::mat4& viewProjMtx, GLuint shader);
 };

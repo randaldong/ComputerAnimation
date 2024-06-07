@@ -7,17 +7,19 @@
 - Some particles of the cloth are “fixed” in place in order to hold the cloth up. Simple controls are available to move these fixed points around.
 - Controls to adjust the ambient wind speed are also provided.
 
-## 4.2 Classes
+## 4.2 Mass-Spring System
 
 ```c++
-|__Cloth
-	|__SpringDamper; Rigid
-    	|__Particle
+Cloth
+    |__spring-dampers (structural, shearing, bending)
+        |__2 particles each
+    |__triangles
+        |__3 particles each
 ```
 
+<img src="https://i.imgur.com/yOAKStT.png" alt="yOAKStT.png|314" style="zoom:30%;" />
 
-
-### 4.1 Particle
+### 4.2.1 Particle
 
 ```c++
 class Particle {
@@ -47,7 +49,7 @@ To implement the ‘fixed’ particles, just add an additional `bool` to each Pa
 
 The fixed bool is set through the Cloth initialization process, so that you can experiment with fixing different parts of the cloth (such as an entire row of vertices or just the corners, etc.).
 
-### 4.2 SpringDamper
+### 4.2.2 SpringDamper
 
 ```c++
 class SpringDamper {
@@ -64,9 +66,7 @@ public:
 };
 ```
 
-
-
-#### 4.2.1 Springs
+#### 4.2.2.1 Springs
 
 Three types of springs: structural,  shear, bending.
 
@@ -80,7 +80,7 @@ Where $k_s$ is the spring constant describing the <u>stiffness</u> of the spring
 
 <img src="https://i.imgur.com/Uu6sKNA.png" style="zoom:50%;" />
 
-#### 4.2.2 Dampers
+#### 4.2.2.2 Dampers
 
 Like a spring, a damper can connect between two particles. It will create a force along the line connecting the particles that <u>resists a difference in velocity</u> along that line.
 
@@ -90,9 +90,9 @@ $$
 $$
 where $k_d$ is the damping constant, $v_{\text {close }}=\left(\mathbf{v}_1-\mathbf{v}_2\right) \cdot \mathbf{e}$ is the closing velocity, and $\mathbf{e}$ is a unit vector that provides the direction.
 
-### 4.3 Triangle
+### 4.2.3 Triangle
 
-#### 4.3.1 Aerodynamic Force
+#### 4.2.3.1 Aerodynamic Force
 
 Acts along the normal of the surface (triangle). The final force is assumed to apply over the entire triangle. We can simply apply 1/3 of the total force to each of the three particles connecting the triangle.
 
@@ -104,7 +104,7 @@ Acts along the normal of the surface (triangle). The final force is assumed to a
 
 ![](https://i.imgur.com/zk06FPA.png)
 
-#### 4.3.2 Triangle Normals
+#### 4.2.3.2 Triangle Normals
 
 The Triangles need to compute their normal every `Update` in order to do the physics/rendering.
 
@@ -114,7 +114,7 @@ In addition, one can implement dynamic smooth shading, where the normals are ave
 - Loop through all triangles and add the triangle normal to the normal of each of the three particles it connects
 - Loop through all the particles again and normalize the normal
 
-### 4.4 Cloth
+### 4.2.4 Cloth
 
 The `Cloth` class has one or more initialization functions that sets up the arrays and configures the connectivity. Different `init` functions could set up different <u>sizes</u> of cloth, different material <u>stiffness</u> properties, or different <u>configurations</u> like ropes, and more.
 
@@ -135,6 +135,23 @@ while (not finished) {
     // Draw or store results… 
 }
 ```
+
+- Simulation components: particle, spring-damper, surfaces...
+- Simulation stability:
+    - Forward Euler integration with small time steps/adaptive time steps/oversampling
+    - Backward Euler integration
+    - Other integration methods
+- Simulation process:
+    - Compute Forces
+        - For each particle: apply gravity
+        - For each spring-damper: compute & apply spring-damper forces
+        - For each triangle: compute & apply aerodynamic forces
+    - Integrate Motion
+        - For each particle: compute acceleration and apply forward Euler integration
+
+    - Collision detection & response
+    - Apply Constraints
+       - For each particle: if intersecting, push to legal position & adjust velocity
 
 ## 4.5 Features
 

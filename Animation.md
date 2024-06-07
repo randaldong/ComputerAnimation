@@ -36,13 +36,21 @@ animation {
 
 ## 3.2 Animation Classes Structure
 
-new classes should include: `AnimationPlayer`, `AnimationClip`, `Channel`, `Keyframe`
+new classes should include: `AnimationPlayer`, `AnimationClip`, `Channel`, `Keyframe`, `AnimRig`
 
 ```c++
 AnimationPlayer
 |__AnimationClip
 	|__Channel
 	    |__Keyframe
+|__AnimRig
+    |__Skeleton
+    	|__Joint
+    		|__Cube
+    		|__DOF
+    |__Skin
+    	|__Vertex
+    	|__Skeleton
 ```
 
 - **AnimationPlayer**
@@ -138,7 +146,6 @@ AnimationPlayer
   };
   ```
 
-  - 
 
 ## 3.3 Features
 

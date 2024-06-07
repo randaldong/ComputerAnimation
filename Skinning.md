@@ -99,7 +99,7 @@ Skinning Equation:
 
 Rendered with shading using at least two different colored lights.
 
-### 2.3.1 Classic Lighting Model
+## 2.4 Blinn-Phong Illumination Model
 
 > red book p361
 
@@ -115,7 +115,7 @@ color =
 
 `pow(cosAlpha,5)` is used to control the width of the specular lobe. Increase 5 to get a thinner lobe.
 
-#### 2.3.1.1 Ambient Light
+### 2.4.1 Ambient Light
 
 Ambient light is light not coming from any specific direction. The classic lighting model considers it a constant throughout the scene, forming a decent first approximation to the scattered light present in a scene.
 
@@ -123,27 +123,21 @@ It could either be accumulated as a base contribution per light source or be pre
 
 The ambient light doesn’t change across primitives, so we will pass it in from the application as a `uniform` variable.
 
-#### 2.3.1.2 Diffuse Light
+### 2.4.2 Diffuse Light
 
 Diffuse light is light scattered by the surface equally in all directions for a particular light source. Diffuse light is responsible for being able to see a surface lit by a light even if the surface is not oriented to reflect the light source directly toward your eye.
 
 Computing it depends on the direction of the surface normal and the direction of the light source, but not the direction of the eye. It also depends on the color of the surface.
 
-#### 2.3.1.3 Specular Light
+### 2.4.3 Specular Light
 
 Specular highlighting is light reflected directly by the surface. This highlighting refers to how much the surface material acts like a mirror. The strength of this angle-specific effect is referred to as shininess.
 
 Computing specular highlights requires knowing the surface normal, the direction of the light source, and the direction of the eye.
 
-## 2.4 Interaction
+## 2.5 Interaction
 
 This program allows some way to interactively control individual DOF values in the skeleton.
-
-## 2.5 Implementation on GPU
-
-> [Implementing GPU skinning](https://subscription.packtpub.com/book/programming/9781800208087/10/ch10lvl1sec92/implementing-gpu-skinning)
-
-This would most likely be done by just implementing it in the GLSL vertex shader. This requires storing the skinning data in the vertex buffer and passing the entire array of skeleton matrices to the vertex shader. (Alternately, one could implement this through other GPU techniques such as through Cuda.)
 
 ## 2.6 Features
 
@@ -160,3 +154,9 @@ This would most likely be done by just implementing it in the GLSL vertex shader
 
 1. // Texture 
 2. // Change light
+
+## Appendix: Implementation on GPU
+
+> [Implementing GPU skinning](https://subscription.packtpub.com/book/programming/9781800208087/10/ch10lvl1sec92/implementing-gpu-skinning)
+
+This would most likely be done by just implementing it in the GLSL vertex shader. This requires storing the skinning data in the vertex buffer and passing the entire array of skeleton matrices to the vertex shader. (Alternately, one could implement this through other GPU techniques such as through Cuda.)
