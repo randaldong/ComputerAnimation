@@ -244,9 +244,9 @@ Milestones to be achieved in the coming months (refer to [JIRA](https://randaldo
 
 - Email (or Apple mail, if I have one): randaldongdr@gmail.com
 - Slack: message, video meetings
-- iMessage: *858-205-3489*
+- iMessage: *xxx-xxx-xxxx*
 
-- Phone call: *858-205-3489*
+- Phone call: *xxx-xxx-xxxx*
 - Pair programming (if necessary): [Tuple](https://tuple.app/), [Visual Studio Live Share](https://visualstudio.microsoft.com/services/live-share/), [VS Code Live Share](https://code.visualstudio.com/learn/collaboration/live-share), etc.
 
 ## 5. Misc.
