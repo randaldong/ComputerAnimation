@@ -59,7 +59,31 @@ balljoint root {
 > - `View Projection Matrix` transforms from world space into the view space of the camera for rendering.
 > - Can use the `Cube` class as a box to render a bone. It can be constructed with the `boxmin` & `boxmax` values of a particular bone. To draw it in the correct world-space location based on the joint's world matrix `W`, we multiply it with the camera `view-projection matrix` ` V `to get `V*W`. This should then <u>be passed to the Cube::draw() function.</u>
 
-## 1.2 Classes
+## 1.2 Skeleton Posing
+
+A character skeleton is a poseable framework of joints arranged in a tree structure. A joint allows relative movement within the skeleton. Joints are usually represented as affine transformation matrices. Joints can be rotational, translational, or other types. Usually, we use degree of freedom or DOF to represent a particular axis or dimension of movement within a joint.
+
+![](https://i.imgur.com/oVC6kNN.png)
+
+Skeleton Posing Process:
+
+1. Specify all DOF values for the skeleton (done by higher level animation code)
+2. Recursively traverse through the joint hierarchy starting at the root and use <u>forward kinematics</u> to compute local and the world matrices of each joint (done by the skeleton system)
+3. Use joint world matrices to deform skin geometry (done by skin system)
+
+
+
+Forward kinematics refers to the kinematic process of computing world space geometric data from a set of degrees of freedom such as joint angles. It passes movement through the skeleton from parent nodes to child nodes. 
+
+In the recursive tree traversal, each joint first computes its own local matrix $\mathbf{L}$ based on the values of its DOFs and some formula representative of the joint type:
+$$
+\mathbf{L}=\mathbf{L}_{\text {joint }}\left(\varphi_1, \varphi_2, \ldots \varphi_N\right)
+$$
+Then, the joint world matrix $\mathbf{W}$ is computed by concatenating its local matrix $\mathbf{L}$ with the world matrix of it's parent joint
+$$
+\mathbf{W}=\mathbf{W}_{\text {parent }} \cdot \mathbf{L}
+$$
+## 1.3 Classes
 
 ### 1.2.1 DOF
 
@@ -161,7 +185,7 @@ bool Skeleton::Load(const char *file) {
 }
 ```
 
-## 1.3 Display
+## 1.4 Display
 
 ```c++
 void Joint::Update(Matrix& parent) {
@@ -175,7 +199,7 @@ void Joint::Draw() {
 }
 ```
 
-## 1.4 GUI
+## 1.5 GUI
 
 > Add a simple GUI to the program (such as ImGui, NanoGUI, or AntTweakBar) that allows the user to interactively adjust any of the DOFs in the skeleton. 
 
@@ -191,7 +215,7 @@ ImGui:
 
 lists all of the DOFs by name  and allows the user to adjust the value within the DOF limits.
 
-## 1.5 Features
+## 1.6 Features
 
 1. Slider bar changes:
    1. Camera distance, azimuth, inclination;

@@ -81,7 +81,19 @@ bindings [numjoints]
 
   - `std::vector<Joint*> joints`， used for linking joints with skin when setting weights
 
-## 2.3 Smooth Skin Algorithm
+## 2.3 Smooth Skinning
+
+![](https://i.imgur.com/6bapMvc.png)
+
+![](https://i.imgur.com/bSB5GNF.png)
+
+![](https://i.imgur.com/UUkDlmD.png)
+
+![](https://i.imgur.com/w2sKFPW.png)
+
+![](https://i.imgur.com/jEsZHyz.png)
+
+![](https://i.imgur.com/Vp7zTVL.png)
 
 Skinning Equation:
 
@@ -89,19 +101,38 @@ Skinning Equation:
 
   $\mathbf{v}^{\prime}=\sum w_{i} \mathbf{W}_{i} \cdot \mathbf{B}_{i}^{-1} \cdot \mathbf{v}$
 
+  - $\mathbf{v}$ is the original vertex position in the binding space
+  - $\mathbf{v}^{\prime}$ is the transformed vertex position in world space
+  - $w_i$ is the weight of the vertex attachment to joint $i$ (note $\sum w_i=1$ )
+  - $\mathbf{W}_i$ is the world matrix of joint $i$
+  - $\mathbf{B}_i$ is the binding matrix for joint $i$
+
 - For vertex normals (assume there’s no shearing or non-uniform scaling, thus not using inverse transpose):
 
   $\mathbf{n}^{*}=\sum w_{i} \mathbf{W}_{i} \cdot \mathbf{B}_{i}^{-1} \cdot \mathbf{n}$
 
   $\mathbf{n}^{\prime}=\frac{\mathbf{n}^{*}}{\left|\mathbf{n}^{*}\right|}$
 
-## 2.3 Render Skin
+## 2.4 Blinn-Phong Illumination Model
 
 Rendered with shading using at least two different colored lights.
 
-## 2.4 Blinn-Phong Illumination Model
-
 > red book p361
+
+> Uses the halfway vector. Faster to compute than Phong’s reflection vector. Still view-dependent since H depends on V
+
+- use angle between the halfway vector and the surface normal
+- use cos to measure if they are pointing in the same direction
+- use shininess as the power to control wideness of the highlight
+
+**Blinn-Phong’s specular term:**
+
+- `float spec = pow(max(dot(halfVec, normal), 0.0), material.shininess);`
+- `vec3 specular = light.specular * (spec * material.specular);`
+
+![](https://i.imgur.com/Z0phatN.png)
+
+![](https://i.imgur.com/Rk7WKWt.png)
 
 ```c++
 color =
