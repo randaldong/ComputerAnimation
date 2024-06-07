@@ -79,8 +79,8 @@
     <LibraryPath>D:\CG\Project\ComputerAnimation\Skeletons\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\CG\Project\ComputerAnimation\Skeletons\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\CG\Project\ComputerAnimation\Skeletons\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>D:\CG\Project\ComputerAnimation\Skeletons\include;$(IncludePath)</IncludePath>

@@ -1,21 +1,21 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "Cloth.hpp"
 #include "Display.hpp"
-#include "../Imgui/imgui.h"
-#include "../Imgui/imgui_impl_glfw.h"
-#include "../Imgui/imgui_impl_opengl3.h"
-#include "../Imgui/imgui_internal.h"
+#include "../imgui/imgui.h"
+#include "../imgui/imgui_impl_glfw.h"
+#include "../imgui/imgui_impl_opengl3.h"
+#include "../imgui/imgui_internal.h"
 ////////////////////////////////////////////////////////////////////////////////
 // Global parameters/objects setting
 ////////////////////////////////////////////////////////////////////////////////
 
 /** Cloth **/
-const char* clothTexFilename1 = "Assets/clothTex1.jpg";
-const char* clothTexFilename2 = "Assets/clothTex2.jpg";
-const char* clothTexFilename3 = "Assets/clothTex3.jpg";
-const char* clothTexFilename4 = "Assets/clothTex4.jpg";
-const char* clothTexFilename5 = "Assets/clothTex5.jpg";
-const char* clothTexFilename6 = "Assets/clothTex6.jpg";
+const char* clothTexFilename1 = "assets/clothTex1.jpg";
+const char* clothTexFilename2 = "assets/clothTex2.jpg";
+const char* clothTexFilename3 = "assets/clothTex3.jpg";
+const char* clothTexFilename4 = "assets/clothTex4.jpg";
+const char* clothTexFilename5 = "assets/clothTex5.jpg";
+const char* clothTexFilename6 = "assets/clothTex6.jpg";
 const char* pinMode1 = "Pin Upper Corner";
 const char* pinMode2 = "Pin Upper Corner";
 vec3 clothPos(-3, 8, -2);
@@ -25,13 +25,13 @@ float clothMoveSpeed = 0.05f;
 
 /** Environment **/
 // rigid-ground
-const char* groundTexFilename = "Assets/groundTex1.jpg";
+const char* groundTexFilename = "assets/groundTex1.jpg";
 vec3 groundPos(-5, 1, 2);
 vec2 groundSize(10, 10);
 float reGround = 0.6f;
 Ground ground(groundPos, groundSize, reGround);
 // rigid-sphere, magic_orb
-const char* orbTexFilename = "Assets/orbTex1.jpg";
+const char* orbTexFilename = "assets/orbTex1.jpg";
 vec3 orbCenter(0, 4, -2);
 float orbRadius = 1.5f;
 float reOrb = 0.8f;
@@ -39,14 +39,14 @@ Sphere orb(orbRadius, orbCenter, reOrb);
 bool isOrbUseColor = false;
 bool isOrbTransparent = true;
 // sphere for light
-const char* lightTexFilename = "Assets/lightTex.jpg";
+const char* lightTexFilename = "assets/lightTex.jpg";
 float bulbRadius = 0.1f;
 Sphere lightBulb(bulbRadius, vec3(pointLight.pos.x, pointLight.pos.y, pointLight.pos.z));
 float lightMoveSpeed = 0.05f;
 bool isLightUseColor = true;
 bool isLightTransparent = false;
 // sphere for wind/fan
-const char* fanTexFilename = "Assets/fanTex.jpg";
+const char* fanTexFilename = "assets/fanTex.jpg";
 vec3 fanPos = vec3(2, 7, 3);
 float fanRadius = 0.3f;
 Sphere fan(fanRadius, vec3(fanPos.x, fanPos.y, fanPos.z));
@@ -71,7 +71,7 @@ vec3 grabForce;
 int simFreq = 30; // simulation times per frame, gravity should be divided by this
 double deltaT = 0.01;
 // window1
-const char* windowIconFile = "Assets/windowIcon1.png";
+const char* windowIconFile = "assets/windowIcon1.png";
 const char* windowTitle = "Randal's Magic Cloth";
 int windowWidth = 1920;
 int windowHeight = 1440;
