@@ -174,21 +174,21 @@ Milestones to be achieved in the coming months (refer to [JIRA](https://randaldo
 
 1. Data Files
 
-   - `.skel` file, refer to [1.1 Load File in Skeleton.md](./Skeleton.md#load-file)
+   - `.skel` file, refer to [1.1 Load File in Skeleton.md](./Skeleton.md#11-load-file)
 
-   - `.skin` file, refer to [2.1 Load File in Skinning.md](./Skinning.md#load-file)
+   - `.skin` file, refer to [2.1 Load File in Skinning.md](./Skinning.md#21-load-file)
 
-   - `.anim` file, refer to [3.1 Load File in Animation.md](./Animation.md#load-file)
+   - `.anim` file, refer to [3.1 Load File in Animation.md](./Animation.md#31-load-file)
 2. Classes & Hierarchy: see [Miro](https://miro.com/welcomeonboard/OExBODFHQVN5V0hSZlNKVk54ZHFEdHhqRGNabElJVVNzNTJyTTNsdkNBRjFLTnQwVXRxUmRhRmx5SG5idkxTb3wzNDU4NzY0NTQ0NTg1ODk1MDgwfDI=?share_link_id=393816811085)
 
 
 
 ### 2.4 Key Algorithms
 
-- Blinn-Phong Illumination Model: refer to [2.4 Blinn-Phong Illumination Model in Skinning.md](./Skinning.md##blinn-phong-illumination-model)
+- Blinn-Phong Illumination Model: refer to [2.4 Blinn-Phong Illumination Model in Skinning.md](./Skinning.md#24-blinn-phong-illumination-model)
 - Forward Kinematics
 
-- Mass-Spring System: refer to [4.2 Mass-Spring System in ClothSimulation.md](./ClothSimulation.md##mass-spring-system)
+- Mass-Spring System: refer to [4.2 Mass-Spring System in ClothSimulation.md](./ClothSimulation.md#42-mass-spring-system)
 
 
 
