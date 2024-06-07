@@ -242,7 +242,7 @@ Milestones to be achieved in the coming months (refer to [JIRA](https://randaldo
 
 ## 4. Communication
 
-- Email (or Apple mail, if I have one): randaldongdr@gmail.com
+- Email: randaldongdr@gmail.com
 - Slack: message, video meetings
 - iMessage: *xxx-xxx-xxxx*
 
