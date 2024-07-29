@@ -83,7 +83,11 @@ The cloth simulation module uses a **Mass-Spring System** to simulate a piece of
 The cloth simulation engine currently supports following features:
 
 1. General
-   4. pause simulation
+   
+   1. pause simulation
+   
+   2. reset simulation
+   
 2. Cloth control & physics attributes
    1. move cloth
       1. translate +x (right): `D`
@@ -94,13 +98,16 @@ The cloth simulation engine currently supports following features:
       6. translate +z (outward): `E`
       7. rotate clockwise: `C`
       8. rotate counterclockwise: `Z`
-   2. stiffness: structural, shear, bending
-   3. damping: structural, shear, bending
+   2. load different textures
+   3. change draw mode among particles, springs, and cloth
    4. change pin mode & drop cloth:
       1. Pin Upper Corner
       2. Pin Upper Edge
       3. Drop Cloth
-   5. Friction/elasticity with ground & sphere 
+   5. stiffness: structural, shear, bending
+   6. damping: structural, shear, bending
+   7. friction/elasticity with ground & sphere 
+   
 3. Wind control
    1. wind’s howling/calm
    2. move wind spawn
@@ -111,6 +118,7 @@ The cloth simulation engine currently supports following features:
       5. Inward: `Q`
       6. Outward: `E`
    3. wind velocity (value)
+   
 4. Light control
    1. move light: 
       1. Up: `W`
@@ -121,6 +129,7 @@ The cloth simulation engine currently supports following features:
       6. Outward: `E`
 
    2. change light color with hue wheel
+   
 5. Move camera
    1. Up: `W`
    2. Down: `S`
@@ -128,6 +137,7 @@ The cloth simulation engine currently supports following features:
    4. Right: `D`
    5. Inward: `Q`
    6. Outward: `E`
+   
 6. User grab
    1. hold mouse left button to drag the cloth
    2. quit grab mode either by right click mouse button or unclick the checkbox 

@@ -156,15 +156,17 @@ while (not finished) {
 ## 4.5 Features
 
 1. General :1st_place_medal:
-   4. pause simulation
+   1. pause simulation
+   2. reset simulation
 2. Cloth physics attributes & control :1st_place_medal:
    1. stiffness: structural, shear, bending
    2. damping: structural, shear, bending
-   3. change pin mode & drop cloth:
+   3. friction/elasticity with ground & sphere
+   4. change pin mode & drop cloth:
       1. Pin Upper Corner
       2. Pin Upper Edge
       3. Drop Cloth
-   4. move cloth
+   5. move cloth
       1. translate +x (right): `D`
       2. translate -x (left): `A`
       3. translate +y (up): `W`
@@ -173,7 +175,8 @@ while (not finished) {
       6. translate +z (outward): `E`
       7. rotate clockwise: `C`
       8. rotate counterclockwise: `Z`
-   5. Friction/elasticity with ground & sphere 
+   6. load different textures
+   7. change draw mode among: particles, only springs, cloth
 3. Wind :1st_place_medal:
    1. wind’s howling/calm
    2. move wind spawn
